@@ -1,0 +1,101 @@
+CREATE DATABASE adsa;
+
+USE adsa;
+
+CREATE TABLE pessoa (
+	idPessoa int primary key auto_increment,
+    nome varchar(40),
+    dtNasc date
+);
+
+/*
+DATE - 'AAAA-MM-DD' - '2006-04-11'
+DATETIME - 'AAAA-MM-DD HH:MM:SS'
+*/
+
+-- INSERINDO DADOS NA TABELA PESSOA
+INSERT INTO pessoa VALUES
+	(default, 'Super Homem', '1954-10-10');
+    
+SELECT * FROM pessoa;
+
+INSERT INTO pessoa VALUES
+	(null, 'Homem de Ferro', '1963-10-01');
+    
+INSERT INTO pessoa (nome, dtNasc) VALUES 
+	('Mulher Maravilha', '1941-03-12');
+    
+SELECT * FROM pessoa;
+
+-- EXIBIR O NOME DA PESSOA QUE TENHA 3 NOMES
+SELECT * FROM pessoa WHERE nome LIKE '% % %';
+
+-- ALTERAR A TABELA E RENOMEAR O CAMPO DTNASC
+ALTER TABLE pessoa RENAME COLUMN dtNasc TO dataNasc;
+
+DESCRIBE pessoa;
+
+/*
+INT
+TINYINT - 0 A 9 OU DE 0 A 127
+Numeros Decimais:
+FLOAT - ATE 7 CARACTERES
+DOUBLE - ATE 15 CARACTERES
+DECIMAL - ATE 32 CARACTERES, MAS É O MELHOR POIS DA PARA DELIMITAR AS CASAS DECIMAIS 
+		DECIMAL(3, 1) - 43.2
+        DECIMAL(5, 2) - 430.22
+*/
+
+
+-- ADICIONAR UMA COLUNA CHAMADA ALTURA
+ALTER TABLE pessoa ADD COLUMN altura FLOAT;
+DESCRIBE pessoa;
+
+-- EXCLUIR UMA COLUNA NA MINHA TABELA
+ALTER TABLE pessoa DROP COLUMN altura;
+
+-- MODIFICAR A COLUNA NOME PARA VARCHAR(50)
+ALTER TABLE pessoa MODIFY COLUMN nome varchar(50);
+
+-- RENOMEAR COLUNA
+-- ALTER TABLE pessoa RENAME dtNasc TO dataNasc;
+
+-- ADICIONAR UM CAMPO CHAMADO SALARIO
+ALTER TABLE pessoa ADD COLUMN salario decimal(10, 2);
+
+SELECT * FROM pessoa;
+
+-- ATUALIZAR UMA LINHA QUE JÁ EXISTE 
+UPDATE pessoa SET salario = 1.99 WHERE idPessoa = 1;
+-- NÃO EXISTE UPDATE SEM QUERE
+-- NO MYSQL EXISTE UMA TRAVA DE SEGURANÇA
+-- NO WHERE TEM QUE SER A CHAVE PRIMÁRIA
+
+SELECT * FROM pessoa;
+
+-- EXCLUIR UMA LINHA INTEIRA
+DELETE FROM pessoa WHERE idPessoa = 2;
+-- NÃO EXISTE DELETE SEM WHERE
+-- NO WHERE TEM QUE SER CHAVE PRIMÁRIA
+
+SELECT * FROM pessoa;
+
+-- ALTERAR O INICIO DO AUTO_INCREMENT
+ALTER TABLE pessoa auto_increment = 10000;
+
+INSERT INTO pessoa (nome, salario) VALUES
+	('Hulk', 10.96);
+    
+SELECT * FROM pessoa;
+
+ALTER TABLE pessoa auto_increment = 4;
+
+-- LIMPAR OS DADOS DA TABELA
+TRUNCATE TABLE pessoa;
+
+SELECT * FROM pessoa;
+
+INSERT INTO pessoa (nome) VALUES
+	('Hulk');
+    
+SELECT * FROM pessoa;
