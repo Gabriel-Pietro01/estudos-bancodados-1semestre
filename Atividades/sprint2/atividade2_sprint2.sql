@@ -89,4 +89,80 @@ SELECT f.nome as NomeFuncionario,
 			ON f.fkIdArea = a.idArea;
 		
 -- EXERCICIO 02
--- TERMINAR
+ USE sprint2;
+ 
+ -- CRIANDO AS TABELAS
+ CREATE TABLE usuario (
+	idUsuario int primary key auto_increment,
+    nome varchar(45),
+    fkUsuarioGerenciador int,
+    constraint fkIdUsuarioGerenciador
+		foreign key (fkUsuarioGerenciador)
+			references usuario(idUsuario)
+ );
+ 
+ CREATE TABLE email (
+	idEmail int primary key auto_increment,
+    enderecoEmail varchar(80),
+    fkIdUsuario int,
+    constraint fkIdUsuarioDono
+		foreign key (fkIdUsuario)
+			references usuario(idUsuario)
+ );
+ 
+-- INSERINDO VALORES
+INSERT INTO usuario (nome, fkUsuarioGerenciador) VALUES
+	('root', null),
+    ('Gabriel', null),
+    ('Zeca', null),
+    ('Josep', null),
+    ('Nhonho', null);
+
+UPDATE usuario SET fkUsuarioGerenciador = 3 WHERE idUsuario = 2;
+UPDATE usuario SET fkUsuarioGerenciador = 5 WHERE idUsuario = 4;
+
+INSERT INTO email (enderecoEmail, fkIdUsuario) VALUES 
+	('adm@gmail.com', 1),
+    ('gabriel@gmail.com', 2),
+    ('gabigol.sp@gmail.com', 2),
+    ('zedupao@gmail.com', 3),
+    ('zeca.sp@gmail.com', 3),
+    ('josepio.sp@gmail.com', 4),
+    ('gordinchavoso@gmail.com', 5);
+
+-- REALIZANDO OS SELECTS 
+
+-- SELECT JOIN 
+SELECT  u.nome as Username,
+		g.nome as UsuarioQueGerencia,
+        e.enderecoEmail as Email
+        FROM usuario as u
+        JOIN usuario as G
+			ON u.fkUsuarioGerenciador = g.idUsuario
+		JOIN email as e
+			ON e.fkIdUsuario = u.idUsuario;
+            
+-- SELECT JOIN + WHERE
+SELECT u.nome as Username,
+	   g.nome as UsuarioQueGerencia,
+       e.enderecoEmail as Email 
+       FROM usuario as u
+       JOIN usuario as g
+			ON u.fkUsuarioGerenciador = g.idUsuario
+       JOIN email as e
+			ON e.fkIdUsuario = u.idUsuario
+		WHERE e.enderecoEmail LIKE '%.sp%';
+        
+-- SELECT JOIN + CASE
+SELECT u.nome as Username,
+	   g.nome as UsuarioQueGerencia,
+       e.enderecoEmail as Email,
+       CASE 
+			WHEN u.nome = 'Josep' OR 'root' THEN 'Estrangeiro/Sistema'
+            ELSE 'Brasileiro'
+	   END AS 'Origem'
+       FROM usuario as u
+       JOIN usuario as g
+			ON u.fkUsuarioGerenciador = g.idUsuario
+	   JOIN email as e
+			ON e.fkIdUsuario = u.idUsuario;
